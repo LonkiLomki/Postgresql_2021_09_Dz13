@@ -12,6 +12,8 @@ INSERT INTO good_sum_mart SELECT G.good_name, sum(G.good_price * S.sales_qty) AS
 ```
 
 Добавил следующие триггерные функции:
+
+При добавлении следует добавление текущей стоимости записи, либо добавление новой записи в таблицу со значением записи
 ```
 CREATE or replace function ft_insert_sales()
 RETURNS trigger
@@ -33,7 +35,9 @@ LANGUAGE plpgsql
 VOLATILE
 SET search_path = pract_functions, public
 COST 50;
-
+```
+При удалении следует вычитание текущей стоимости записи с последующим удалением строк, у которых стоимость меньше либо равна 0
+```
 CREATE or replace function ft_delete_sales()
 RETURNS trigger
 AS
@@ -55,7 +59,9 @@ LANGUAGE plpgsql
 VOLATILE
 SET search_path = pract_functions, public
 COST 50;
-
+```
+При обновлении следуют обе процедуры описанные выше.
+```
 CREATE or replace function ft_update_sales()
 RETURNS trigger
 AS
@@ -85,11 +91,6 @@ VOLATILE
 SET search_path = pract_functions, public
 COST 50;
 ```
-
-При добавлении следует добавление текущей стоимости записи, либо добавление новой записи в таблицу со значением записи
-При удалении следует вычитание текущей стоимости записи с последующим удалением строк, у которых стоимость меньше либо равна 0
-При обновлении следуют обе процедуры описанные выше.
-
 Добавил следующие триггеры:
 ```
 CREATE TRIGGER tr_insert_sales
